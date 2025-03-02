@@ -22,7 +22,8 @@ Aquí se compilan recursos cuidadosamente diseñados con el propósito de ser ú
 A continuación, se listan los recursos a los que pueden acceder por medio de un clic:  
 
 1. 🖥️ [Mantenimiento y limpieza de una computadora portátil](01.%20Limpieza%20de%20una%20computadora/)  
-2. 🔌 [Máquinas virtuales, Linux y redes](0.2%20Máquinas%20virtuales%20y%20redes)
+2. 🔌 [Máquinas virtuales, Linux y redes](02.%20Máquinas%20virtuales%20y%20redes)
+3. 🧑‍💻 [Instalación y comandos básicos de Linux](03.%20Instalación%20y%20uso%20de%20Linux)
 
 ---
 
