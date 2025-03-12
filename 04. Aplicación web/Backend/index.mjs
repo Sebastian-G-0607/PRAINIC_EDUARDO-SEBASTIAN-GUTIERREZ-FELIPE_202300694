@@ -1,5 +1,5 @@
 //Archivo principal del backend
-import {app} from './app.mjs'
+import {app} from './app/app.mjs'
 
 //Puerto en el que se levantará el servidor
 const port = 4000;

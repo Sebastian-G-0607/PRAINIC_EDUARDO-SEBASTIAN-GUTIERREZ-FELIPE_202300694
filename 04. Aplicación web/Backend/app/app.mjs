@@ -18,6 +18,6 @@ app.use(cors());
 
 
 //Importación de endpoints
-import {router} from './routes.mjs';
+import {router} from '../routes/routes.mjs';
 
 app.use(router);
