@@ -1,0 +1,115 @@
+/* 📌 General */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden; /* 📌 Evita desplazamiento horizontal */
+    font-family: Arial, sans-serif;
+}
+
+/* 📌 Navbar */
+.navbar {
+    width: 100%;
+    background: #86c8ff;
+    padding: 15px 5%; /* 📌 Padding en porcentaje para evitar desbordamiento */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+    box-sizing: border-box; /* 📌 Evita que el padding aumente el tamaño total */
+}
+
+/* 📌 Estilo de enlaces */
+.nav-link {
+    color: black;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px 10px;
+    transition: 0.3s;
+    white-space: nowrap; /* 📌 Evita que los textos se dividan en varias líneas */
+}
+
+/* 📌 Buscador */
+.search-input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 295px;
+    font-size: 16px;
+    max-width: 100%; /* 📌 Evita que el input crezca más de lo permitido */
+}
+
+/* 📌 Ícono de perfil */
+.perfil-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.perfil-icon img {
+    width: 100%;
+    height: auto;
+}
+
+/* 📌 Contenido */
+.contenido {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+/* 📌 RESPONSIVE DESIGN */
+
+/* ✅ 📱 Celulares */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .search-input {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .nav-link {
+        font-size: 14px;
+    }
+
+    .perfil-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* ✅ 💻 Tablets */
+@media (max-width: 1024px) {
+    .navbar {
+        padding: 10px;
+    }
+
+    .search-input {
+        width: 200px;
+    }
+
+    .nav-link {
+        font-size: 15px;
+    }
+
+    .perfil-icon {
+        width: 44px;
+        height: 44px;
+    }
+}

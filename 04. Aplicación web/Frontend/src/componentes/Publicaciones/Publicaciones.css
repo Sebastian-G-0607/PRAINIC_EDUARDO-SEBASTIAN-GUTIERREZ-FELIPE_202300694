@@ -1,0 +1,16 @@
+/* 📌 Contenedor de la página de publicaciones */
+.contenedor-publicaciones {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* 📌 Lista de publicaciones */
+.lista-publicaciones {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
