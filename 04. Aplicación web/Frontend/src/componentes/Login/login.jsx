@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "./Login.css";
 import Swal from "sweetalert2";
@@ -10,6 +11,8 @@ const Login = () => {
     const[user, setUser] = useState('');
     const[password, setPassword] = useState('');
 
+    const navigate = useNavigate();
+
     //FUNCIÓN QUE SE EJECUTA AL ENVIAR EL FORMULARIO:
     const handleLogin = (e) => {
         e.preventDefault();
@@ -17,7 +20,6 @@ const Login = () => {
     
         //SE ENVÍA LA PETICIÓN AL BACKEND, CON UNA IIFE
         (async () => {
-            console.log("hola");
             try {
                 const response = await axios.get(`http://localhost:4000/login/${user}/${password}`);
                 console.log(response);
@@ -27,6 +29,11 @@ const Login = () => {
                         icon: "success"
                     })
                     localStorage.setItem("token", response.data.token); // Guardamos el token que envió el backend
+
+                    if(localStorage.getItem("token") !== null){
+                        navigate("/user", { replace: true });
+                    }
+                    
                 }
             } catch (error) {
                 Swal.fire({
@@ -57,7 +64,7 @@ const Login = () => {
                 
                 {/* Opciones adicionales */}
                 <div className="login-links">
-                    <Link to="#" className="forgot-password">¿Olvidaste tu contraseña?</Link>
+                    <Link to="/recuperar-contrasenia" className="forgot-password">¿Olvidaste tu contraseña?</Link>
                     <span className="separator">|</span>
                     <Link to="/sign-up" className="register-link">Registrarse</Link>
                 </div>

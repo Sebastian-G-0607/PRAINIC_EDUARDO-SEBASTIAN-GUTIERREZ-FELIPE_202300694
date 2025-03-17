@@ -67,7 +67,101 @@ body {
     margin: 20px auto;
     padding: 15px;
     box-sizing: border-box;
+
+    
 }
+
+/* 📌 Contenedor del perfil */
+.perfil-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* 📌 Ícono de perfil */
+.perfil-icon {
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.perfil-icon:hover {
+    opacity: 0.8;
+}
+
+/* 📌 Menú desplegable */
+.perfil-menu {
+    position: absolute;
+    top: 55px; /* 🔥 Justo debajo del icono */
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    overflow: hidden;
+}
+
+/* 📌 Opciones dentro del menú */
+.perfil-option {
+    padding: 10px;
+    text-align: left;
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+    background: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.perfil-option:hover {
+    background: #f1f1f1;
+}
+
+/* 📌 Estilos específicos para el botón de logout */
+.perfil-option:last-child {
+    color: red;
+    border-top: 1px solid #ddd;
+}
+
+/* 📌 Contenedor de búsqueda */
+.search-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/* 📌 Input de búsqueda */
+.search-input {
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    flex: 1;
+}
+
+/* 📌 Botón de lupa */
+.search-button {
+    background: #85b5e9;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.search-button:hover {
+    background: #0056b3;
+}
+
+
 
 /* 📌 RESPONSIVE DESIGN */
 

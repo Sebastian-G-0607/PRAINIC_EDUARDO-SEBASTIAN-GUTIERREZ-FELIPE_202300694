@@ -1,0 +1,73 @@
+/* 📌 Estilos para el contenedor del curso */
+.curso-aprobado-container {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    margin: 10px 0;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+/* 📌 Cambio de color cuando está seleccionado */
+.curso-aprobado-container.seleccionado {
+    background: #eaf5ff;
+    border-left: 5px solid #007bff;
+}
+
+/* 📌 Checkbox */
+.curso-checkbox {
+    margin-right: 12px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* 📌 Contenedor de detalles */
+.curso-detalles {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+/* 📌 Nombre del curso */
+.curso-nombre {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+/* 📌 Sección */
+.curso-seccion {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.curso-seccion span {
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* 📌 RESPONSIVE DESIGN */
+@media (max-width: 600px) {
+    .curso-aprobado-container {
+        padding: 10px;
+    }
+
+    .curso-checkbox {
+        width: 16px;
+        height: 16px;
+    }
+
+    .curso-nombre {
+        font-size: 14px;
+    }
+
+    .curso-seccion {
+        font-size: 12px;
+    }
+}

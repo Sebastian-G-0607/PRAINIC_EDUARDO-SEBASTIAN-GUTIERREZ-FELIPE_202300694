@@ -1,0 +1,77 @@
+/* 📌 Contenedor principal */
+.comentarios-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* 📌 Título */
+.comentarios-container h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* 📌 Mensaje cuando no hay comentarios */
+.no-comentarios {
+    font-size: 16px;
+    color: #777;
+    font-style: italic;
+}
+
+/* 📌 Lista de comentarios */
+.lista-comentarios {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* 📌 Caja de cada comentario */
+.comentario-box {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    transition: transform 0.2s ease-in-out;
+}
+
+.comentario-box:hover {
+    transform: translateY(-3px);
+}
+
+/* 📌 Autor del comentario */
+.comentario-autor {
+    font-size: 16px;
+    color: #007bff;
+    margin-bottom: 5px;
+}
+
+/* 📌 Mensaje del comentario */
+.comentario-mensaje {
+    font-size: 14px;
+    color: #444;
+    margin: 0;
+}
+
+/* 📌 RESPONSIVE DESIGN */
+@media (max-width: 600px) {
+    .comentarios-container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .comentario-box {
+        padding: 12px;
+    }
+
+    .comentario-autor {
+        font-size: 14px;
+    }
+
+    .comentario-mensaje {
+        font-size: 12px;
+    }
+}
