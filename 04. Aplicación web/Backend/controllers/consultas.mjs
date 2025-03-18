@@ -35,10 +35,196 @@ const validarCorreo = (correo) => {
 //OBTIENE TODOS LOS USUARIOS DE LA BASE DE DATOS
 export async function getCursos (req, res) {
     try {
-        const response = await pool.query('SELECT * FROM curso')
-        return res.json(response[0]);
+        const [response] = await pool.query('SELECT id, nombre, seccion FROM curso')
+        return res.json(response);
     } catch (error) {
         return res.status(500).json({"error": `Server error ${error}`})
+    }
+}
+
+export async function getCatedraticos (req, res) {
+    try {
+        const [response] = await pool.query('SELECT * FROM catedratico ORDER BY nombre ASC');
+        return res.json(response);
+    } catch (error) {
+        return res.status(500).json({"error": `Server error ${error}`})
+    }
+}
+
+export async function getPublicaciones (req, res) {
+    try {
+        const [response] = await pool.query('SELECT p.id, u.nombres, u.apellidos, p.tipo, p.titulo, p.mensaje, p.fecha FROM publicacion p JOIN usuario u on u.r_academico = p.id_usuario ORDER BY p.fecha DESC;');
+        return res.json(response);
+    } catch (error) {
+        return res.status(500).json({"error": `Server error ${error}`})
+    }
+}
+
+//FUNCIÓN QUE RETORNA LOS DATOS DE UN USUARIO:
+export async function getUsuario (req, res) {
+    try {
+        let user = req.params.id_user;
+        let [response] = await pool.query('SELECT nombres, apellidos, contrasenia, correo FROM usuario WHERE r_academico = ?', [user])
+        return res.json(response);
+    } catch (error) {
+        return res.status(500).json({"message": `Server error ${error}`})
+    }
+}
+
+//FUNCIÓN QUE RETORNA LOS CURSOS APROBADOS DE UN USUARIO
+export async function getCursosAprobados (req, res) {
+    try {
+        let user = req.params.id_user;
+        let [response] = await pool.query('SELECT id_curso FROM usuario_cursos WHERE id_usuario = ?', [user])
+        return res.json(response);
+    } catch (error) {
+        return res.status(500).json({"message": `Server error ${error}`})        
+    }
+}
+
+//FUNCIÓN QUE ACTUALIZA UN USUARIO:
+export async function actualizarUsuario(req, res){
+    //EN LA RUTA SE LE PASA EL REGISTRO ACADEMICO Y EN EL JSON LOS OTROS DATOS: 
+    try {
+        let user = req.params.id_user;
+        //SE OBTIENE LA CONTRASEÑA ANTIGUA
+        const [pass] = await pool.query('SELECT contrasenia FROM usuario WHERE r_academico = ?', [user])
+        const password = pass[0].contrasenia;
+        let {nombres, apellidos, contrasenia, correo} = req.body;
+        if(!nombres || !apellidos || !contrasenia || !correo){
+            return res.status(403).json({"message": `Todos los campos deben estar llenos`})      
+        }
+        //SE COMPARA SI LA CONTRASEÑA ES IGUAL
+        if(contrasenia === password){
+            let [response] = await pool.query('UPDATE usuario SET nombres = ?, apellidos = ?, correo = ? WHERE r_academico = ?', [nombres, apellidos, correo, user])
+            return res.json({message: "El usuario fue actualizado con éxito"});
+        }
+        //SI NO ES IGUAL, SE GUARDA EL HASH DE LA NUEVA CONTRASEÑA:
+        else{
+            try {
+                //PRIMERO, SE HASHEA LA NUEVA PASSWORD
+                const saltRounds = 10;
+                const hashedPassword = await hash(contrasenia, saltRounds);
+
+                let [response] = await pool.query('UPDATE usuario SET nombres = ?, apellidos = ?, contrasenia = ?, correo = ? WHERE r_academico = ?', [nombres, apellidos, hashedPassword, correo, user])
+                return res.json({message: "El usuario fue actualizado con éxito"});
+            } catch (error) {
+                return res.status(500).json({status: 500, message: "Ocurrió un error al intentar actualizar el usuario"});
+            }
+            
+        }
+    } catch (error) {
+        return res.status(500).json({"message": `Server error ${error}`})        
+    }
+}
+
+//FUNCIÓN QUE REESTABLECE LA CONTRASEÑA DE UN USUARIO:
+export async function recuperarContrasenia (req, res) {
+    try {
+        //SE OBTIENEN LAS VARIABLES DE LA PETICIÓN
+        const id_user = req.params.id_user;
+        const {correo, contrasenia} = req.body;
+
+        //SE REALIZA PRIMERO LA PETICIÓN PARA SABER SI EXISTE USUARIO CON ESE CARNET
+        let [response] = await pool.query('SELECT * FROM usuario WHERE r_academico = ?', [id_user])
+
+        //SI NO HAY DATOS, SE RETORNA UN STATUS 400
+        if (response.length === 0) {
+            return res.status(400).json({message: "No se encontró el usuario. Intente de nuevo", status: 400})
+        }
+        //SI HAY DATOS, SE COMPRUEBA QUE EL CORREO SEA CORRECTO
+        else {
+            if(correo !== response[0].correo){
+                return res.status(400).json({message: "No se encontró el usuario. Verifique de nuevo los datos", status: 400})
+            }
+            else{
+                //PRIMERO, SE HASHEA LA NUEVA PASSWORD
+                const saltRounds = 10;
+                const hashedPassword = await hash(contrasenia, saltRounds);
+                //SE REALIZA LA PETICIÓN A LA BBDD
+                let [responsePassword] = await pool.query('UPDATE usuario SET contrasenia = ? WHERE r_academico = ?', [hashedPassword, id_user])
+                return res.status(200).json({message: "Se reestableció la contraseña correctamente", status: 200})
+            }
+        }
+    } catch (error) {
+        return res.status(500).json({"message": `Server error ${error}`, status: 500})        
+    }
+}
+
+//FUNCION QUE APRUEBA EL CURSO DE UN USUARIO:
+export async function aprobarCurso(req, res) {
+    /*JSON DE ENTRADA:
+    {
+        id_curso: ##
+    }*/
+    try {
+        let user = req.params.id_user;
+        let {id_curso} = req.body;
+        let [response] = await pool.query('INSERT INTO usuario_cursos (id_curso, id_usuario) VALUES (?, ?)', [id_curso, user]);
+        return res.json({message: `El curso fue marcado como aprobado`});
+    } catch (error) {
+        return res.status(500).json({"message": `Error al marcar el curso como aprobado ${error}`})        
+
+    }
+}
+//FUNCIÓN QUE QUITA EL CURSO APROBADO DE UN USUARIO:
+export async function quitarCurso(req, res){
+    /*JSON DE ENTRADA:
+    {
+        id_curso: ##
+    }*/
+    try {
+        let user = req.params.id_user;
+        let {id_curso} = req.body;
+        let [response] = await pool.query('DELETE FROM usuario_cursos WHERE id_curso = ? AND id_usuario = ?', [id_curso, user])
+        return res.json({message: `El curso fue quitado como aprobado`})
+    } catch (error) {
+        return res.status(500).json({"message": `Error al quitar el curso como aprobado ${error}`});        
+    }
+}
+
+//FUNCIÓN QUE RETORNA UN USUARIO Y SUS CURSOS APROBADOS:
+export async function verOtro (req, res){
+    try {
+        const id_user = req.params.id_user;
+            let [response] = await pool.query('SELECT r_academico, nombres, apellidos, correo FROM usuario WHERE r_academico = ?', [id_user])
+            let [response2] = await pool.query('SELECT c.nombre, c.seccion FROM usuario_cursos uc JOIN curso c ON uc.id_usuario = ? AND c.id = uc.id_curso;', [id_user])
+            return res.json({personal: response, cursos: response2})
+    } catch (error) {
+        return res.status(500).json({"message": `Error al visitar el perfil del usuario ${error}`});    
+    }
+    
+}
+
+//FUNCIÓN QUE PUBLICA UN COMENTARIO EN UNA PUBLICACIÓN:
+export async function publicarComentario(req, res) {
+    try {
+        //SE OBTIENE LA INFORMACIÓN DE LA PETICIÓN:
+        const id_publicacion = req.params.id_publicacion;
+        const {id_user, mensaje} = req.body;
+        
+        //SE ENVÍA LA PETICIÓN A LA BBDD
+        try {
+            let [response] = await pool.query('INSERT INTO publicacion_comentario (id_publicacion, id_usuario, mensaje) VALUES (?, ?, ?);', [id_publicacion, id_user, mensaje])
+            return res.status(200).json({"message": `El comentario fue publicado con éxito`, status: 200});
+        } catch (error) {
+            return res.status(500).json({"message": `Error al publicar el comentario ${error}`, status: 500});
+        }
+    } catch (error) {
+        return res.status(500).json({"message": `Error al publicar el comentario ${error}`, status: 500});
+    }
+}
+
+//FUNCIÓN QUE RETORNA LOS COMENTARIOS DE UNA PUBLICACION
+export async function getComentarios(req, res) {
+    try {
+        //SE OBTIENE LA INFORMACIÓN DE LA PETICIÓN:
+        const id_publicacion = req.params.id_publicacion;
+
+        let [response] = await pool.query('SELECT pc.id, u.nombres, u.apellidos, pc.mensaje FROM publicacion_comentario pc JOIN usuario u ON u.r_academico = pc.id_usuario WHERE pc.id_publicacion = ?', [id_publicacion])
+        return res.status(200).json({status: 200, comentarios: response})
+    } catch (error) {
+        return res.status(500).json({"message": `Error al obtener los comentarios de la publicación ${error}`});
     }
 }
 
@@ -83,6 +269,27 @@ export async function registrarUsuario (req, res) {
 
 }
 
+//FUNCION PARA REGISTRAR UNA PUBLICACION
+export async function crearPublicacion(req, res){
+    try {
+        let id_usuario = req.params.id_usuario
+        let {tipo, titulo, mensaje} = req.body
+        //SI NO SE ENVIAN TODOS LOS DATOS
+        if(!id_usuario || !tipo || !titulo || !mensaje){
+            return res.status(400).json({status: 400, message: "No se proporcionaron todos los datos, intente de nuevo."})
+        }
+        try {
+            //SE ENVÍA LA QUERY A LA BASE DE DATOS
+            let response = await pool.query('INSERT INTO publicacion (id_usuario, tipo, titulo, mensaje) VALUES (?, ?, ?, ?)', [id_usuario, tipo, titulo, mensaje])
+            return res.status(200).json({message: "Publicacion creada con éxito."})
+        } catch (error) {
+            return res.status(500).json({status: 500, message: "Ocurrió un error en la base de datos."})
+        }      
+    } catch (error) {
+        return res.status(500).json({status: 500, message: "Ocurrió un error interno al crear la publicación."})
+    }
+}
+
 export async function Login (req, res) {
     try {
         //PRIMERO SE DESESTRUCTURA EL CUERPO DE LA PETICIÓN:
@@ -107,7 +314,7 @@ export async function Login (req, res) {
                     const token = jwt.sign(
                         { id: rows[0].r_academico, nombre: `${primerNombre} ${primerApellido}` }, // Payload
                         SECRET_KEY, // Clave secreta
-                        { expiresIn: "1h" } // Expiración del token
+                        { expiresIn: "10m" } // Expiración del token
                     );
                     return res.status(200).json({status: 200, message: "Se encontró el usuario", user: rows[0].r_academico, nombre: `${primerNombre} ${primerApellido}`, token})
                 } 
