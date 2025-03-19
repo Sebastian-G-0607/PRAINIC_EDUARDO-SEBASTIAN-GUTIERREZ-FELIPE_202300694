@@ -1,0 +1,91 @@
+/* 📌 Fondo y estructura general */
+.recuperar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to right, #2c3e50, #4ca1af);
+}
+
+/* 📌 Caja del formulario */
+.recuperar-box {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    width: 450px;
+    text-align: center;
+}
+
+/* 📌 Logo */
+.recuperar-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.recuperar-logo img {
+    width: 180px;
+    height: auto;
+}
+
+/* 📌 Título */
+.recuperar-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* 📌 Campos de entrada */
+.recuperar-input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 14px;
+    border: none;
+    border-radius: 6px;
+    background-color: #ecf0f1;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+}
+
+.recuperar-input:focus {
+    outline: none;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 5px rgba(44, 62, 80, 0.3);
+}
+
+/* 📌 Botón */
+.recuperar-button {
+    width: 100%;
+    background: #e74c3c;
+    color: white;
+    padding: 14px;
+    font-size: 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.recuperar-button:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
+
+/* 📌 Enlace para volver al login */
+.recuperar-links {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.back-to-login {
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+.back-to-login:hover {
+    color: #2980b9;
+}

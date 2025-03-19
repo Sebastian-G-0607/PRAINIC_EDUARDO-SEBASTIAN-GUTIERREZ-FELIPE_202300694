@@ -1,0 +1,37 @@
+/* 📌 Contenedor principal de la página */
+.cursos-aprobados-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* 📌 Título */
+.cursos-aprobados-container h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* 📌 Lista de cursos */
+.lista-cursos {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* 📌 Mensaje cuando no hay cursos */
+.mensaje-no-cursos {
+    font-size: 16px;
+    color: #777;
+    margin-top: 20px;
+}
+
+/* 📌 RESPONSIVE DESIGN */
+@media (max-width: 600px) {
+    .cursos-aprobados-container {
+        width: 90%;
+        padding: 15px;
+    }
+}
